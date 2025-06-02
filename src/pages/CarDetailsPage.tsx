@@ -15,6 +15,8 @@ import {
   Settings, 
   Fuel
 } from 'lucide-react';
+import ChatButton from '../components/chat/ChatButton';
+import ChatWindow from '../components/chat/ChatWindow';
 
 const CarDetailsPage: React.FC = () => {
   const { t } = useTranslation();
@@ -23,6 +25,7 @@ const CarDetailsPage: React.FC = () => {
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [showAllReviews, setShowAllReviews] = useState(false);
+  const [showChat, setShowChat] = useState(false);
   
   // Mock car data
   const car = {
@@ -381,7 +384,7 @@ const CarDetailsPage: React.FC = () => {
                   <h4 className="font-bold">{car.owner.name}</h4>
                   <div className="flex items-center">
                     <Star size={16} className="text-yellow-500 fill-current" />
-                    <span className="ml-1 rtl:mr-1 rtl:ml-0 text-sm">{car.owner.rating}</span>
+                    <span className="ml-1 rtl:mr-1 rtl:ml-0">{car.owner.rating}</span>
                     {car.owner.verified && (
                       <div className="flex items-center ml-2 rtl:mr-2 rtl:ml-0 text-primary-500">
                         <Shield size={14} className="mr-1 rtl:ml-1 rtl:mr-0" />
@@ -396,13 +399,23 @@ const CarDetailsPage: React.FC = () => {
                 <Zap size={16} className="text-primary-500 mr-2 rtl:ml-2 rtl:mr-0" />
                 <span>Responds {car.owner.responseTime}</span>
               </div>
-              <button className="btn btn-outline w-full mt-4">
-                Contact {car.owner.name.split(' ')[0]}
-              </button>
+              <ChatButton 
+                ownerName={car.owner.name} 
+                onClick={() => setShowChat(true)} 
+              />
             </div>
           </div>
         </div>
       </div>
+
+      {/* Chat Window */}
+      {showChat && (
+        <ChatWindow
+          receiverId={car.owner.id}
+          receiverName={car.owner.name}
+          onClose={() => setShowChat(false)}
+        />
+      )}
     </div>
   );
 };
