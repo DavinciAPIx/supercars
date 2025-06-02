@@ -15,6 +15,7 @@ import UserProfilePage from './pages/UserProfilePage';
 import OwnerDashboardPage from './pages/OwnerDashboardPage';
 import RenterDashboardPage from './pages/RenterDashboardPage';
 import AuthPage from './pages/AuthPage';
+import ListCarPage from './pages/ListCarPage';
 
 function App() {
   return (
@@ -29,6 +30,7 @@ function App() {
               <Route path="profile" element={<UserProfilePage />} />
               <Route path="owner-dashboard" element={<OwnerDashboardPage />} />
               <Route path="renter-dashboard" element={<RenterDashboardPage />} />
+              <Route path="owner" element={<ListCarPage />} />
             </Route>
             <Route path="/auth" element={<AuthPage />} />
           </Routes>
