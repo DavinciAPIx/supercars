@@ -2,11 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, Link } from 'react-router-dom';
 import { Mail, Lock, User, Phone, Camera, Upload, CheckCircle } from 'lucide-react';
+import { useAuth } from '../contexts/AuthContext';
+import { supabase } from '../lib/supabase';
 
 const AuthPage: React.FC = () => {
   const { t } = useTranslation();
   const location = useLocation();
   const navigate = useNavigate();
+  const { signIn, signUp, user } = useAuth();
   const [isSignUp, setIsSignUp] = useState(false);
   const [step, setStep] = useState(1); // 1: login/signup, 2: verification
   
@@ -16,6 +19,8 @@ const AuthPage: React.FC = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [fullName, setFullName] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
+  const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   
   // Verification states
   const [idUploaded, setIdUploaded] = useState(false);
@@ -27,28 +32,81 @@ const AuthPage: React.FC = () => {
     const params = new URLSearchParams(location.search);
     const signupParam = params.get('signup');
     setIsSignUp(signupParam === 'true');
-  }, [location]);
-  
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (isSignUp) {
-      // Move to verification step
-      setStep(2);
-    } else {
-      // Handle login
-      // Redirect to home or previous page
+
+    // Redirect if already authenticated
+    if (user) {
       navigate('/');
+    }
+  }, [location, user, navigate]);
+  
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      if (isSignUp) {
+        if (password !== confirmPassword) {
+          throw new Error('Passwords do not match');
+        }
+        await signUp(email, password, fullName, phoneNumber);
+        setStep(2);
+      } else {
+        await signIn(email, password);
+        navigate('/');
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
     }
   };
   
-  const handleVerificationSubmit = (e: React.FormEvent) => {
+  const handleVerificationSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Process verification
-    navigate('/');
+    setError('');
+    setLoading(true);
+
+    try {
+      if (!user) throw new Error('No user found');
+
+      // Create verification documents records
+      const { error: verificationError } = await supabase
+        .from('verification_documents')
+        .insert([
+          {
+            user_id: user.id,
+            document_type: 'id_card',
+            document_url: 'placeholder-url',
+            status: 'pending'
+          },
+          {
+            user_id: user.id,
+            document_type: 'driving_license',
+            document_url: 'placeholder-url',
+            status: 'pending'
+          },
+          {
+            user_id: user.id,
+            document_type: 'selfie',
+            document_url: 'placeholder-url',
+            status: 'pending'
+          }
+        ]);
+
+      if (verificationError) throw verificationError;
+
+      navigate('/');
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An error occurred');
+    } finally {
+      setLoading(false);
+    }
   };
   
-  const handleUpload = (type: 'id' | 'license' | 'selfie') => {
-    // Simulate file upload
+  const handleUpload = async (type: 'id' | 'license' | 'selfie') => {
+    // In a real implementation, this would handle file upload to Supabase storage
+    // For now, we'll simulate the upload
     setTimeout(() => {
       if (type === 'id') setIdUploaded(true);
       if (type === 'license') setLicenseUploaded(true);
@@ -78,12 +136,25 @@ const AuthPage: React.FC = () => {
 
       <div className="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
         <div className="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+          {error && (
+            <div className="mb-4 bg-red-50 border-l-4 border-red-400 p-4">
+              <div className="flex">
+                <div className="flex-shrink-0">
+                  <AlertCircle className="h-5 w-5 text-red-400" />
+                </div>
+                <div className="ml-3">
+                  <p className="text-sm text-red-700">{error}</p>
+                </div>
+              </div>
+            </div>
+          )}
+
           {step === 1 ? (
-            <form className="space-y-6\" onSubmit={handleSubmit}>
+            <form className="space-y-6" onSubmit={handleSubmit}>
               {isSignUp && (
                 <>
                   <div>
-                    <label htmlFor="fullName\" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
                       {t('auth.fullName')}
                     </label>
                     <div className="mt-1 relative rounded-md shadow-sm">
@@ -189,22 +260,23 @@ const AuthPage: React.FC = () => {
                 </div>
               )}
 
-              <div className="flex items-center justify-between">
-                {!isSignUp && (
+              {!isSignUp && (
+                <div className="flex items-center justify-between">
                   <div className="text-sm">
-                    <a href="#\" className="font-medium text-primary-500 hover:text-primary-600">
+                    <a href="#" className="font-medium text-primary-500 hover:text-primary-600">
                       {t('auth.forgotPassword')}
                     </a>
                   </div>
-                )}
-              </div>
+                </div>
+              )}
 
               <div>
                 <button
                   type="submit"
-                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500"
+                  disabled={loading}
+                  className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-primary-500 hover:bg-primary-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
-                  {isSignUp ? t('auth.signup') : t('auth.login')}
+                  {loading ? 'Loading...' : (isSignUp ? t('auth.signup') : t('auth.login'))}
                 </button>
               </div>
             </form>
@@ -288,14 +360,14 @@ const AuthPage: React.FC = () => {
               <div>
                 <button
                   type="submit"
+                  disabled={loading || !(idUploaded && licenseUploaded && selfieUploaded)}
                   className={`w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white ${
-                    idUploaded && licenseUploaded && selfieUploaded
+                    idUploaded && licenseUploaded && selfieUploaded && !loading
                       ? 'bg-primary-500 hover:bg-primary-600 focus:ring-primary-500'
                       : 'bg-gray-400 cursor-not-allowed'
                   } focus:outline-none focus:ring-2 focus:ring-offset-2`}
-                  disabled={!(idUploaded && licenseUploaded && selfieUploaded)}
                 >
-                  {t('auth.verification.submit')}
+                  {loading ? 'Loading...' : t('auth.verification.submit')}
                 </button>
               </div>
             </form>
