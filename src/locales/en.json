@@ -1,0 +1,155 @@
+{
+  "general": {
+    "appName": "Sayyara",
+    "tagline": "Drive the car you want, when you want it",
+    "switchToArabic": "العربية"
+  },
+  "nav": {
+    "home": "Home",
+    "search": "Search Cars",
+    "howItWorks": "How It Works",
+    "becomeOwner": "List Your Car",
+    "login": "Log In",
+    "signup": "Sign Up",
+    "profile": "Profile",
+    "dashboard": "Dashboard",
+    "logout": "Log Out"
+  },
+  "home": {
+    "hero": {
+      "title": "Rent Cars Directly from Owners",
+      "subtitle": "The most trusted P2P car rental platform in Saudi Arabia",
+      "cta": "Find a Car"
+    },
+    "features": {
+      "title": "Why Choose Sayyara",
+      "verified": {
+        "title": "Verified Users",
+        "description": "Every renter and owner is verified for your safety"
+      },
+      "insurance": {
+        "title": "Full Insurance",
+        "description": "Every rental is covered by comprehensive insurance"
+      },
+      "support": {
+        "title": "24/7 Support",
+        "description": "Our team is available around the clock"
+      },
+      "tracking": {
+        "title": "GPS Tracking",
+        "description": "Know where your car is at all times"
+      }
+    },
+    "howItWorks": {
+      "title": "How It Works",
+      "forRenters": "For Renters",
+      "forOwners": "For Car Owners",
+      "steps": {
+        "renter1": "Create an account and verify your identity",
+        "renter2": "Search for available cars",
+        "renter3": "Book and pay securely",
+        "renter4": "Pick up the car and enjoy your trip",
+        "owner1": "List your car with photos and details",
+        "owner2": "Set your availability and pricing",
+        "owner3": "Approve booking requests",
+        "owner4": "Hand over the car and earn money"
+      }
+    },
+    "cta": {
+      "title": "Ready to get started?",
+      "rentCta": "Rent a Car",
+      "listCta": "List Your Car"
+    }
+  },
+  "search": {
+    "title": "Find the Perfect Car",
+    "filters": {
+      "location": "Location",
+      "dates": "Dates",
+      "carType": "Car Type",
+      "price": "Price Range",
+      "features": "Features",
+      "search": "Search"
+    },
+    "sort": {
+      "label": "Sort by",
+      "recommended": "Recommended",
+      "priceAsc": "Price: Low to High",
+      "priceDesc": "Price: High to Low",
+      "rating": "Rating"
+    },
+    "noResults": "No cars found. Try adjusting your filters."
+  },
+  "carDetails": {
+    "features": "Features",
+    "specifications": "Specifications",
+    "availability": "Availability",
+    "reviews": "Reviews",
+    "location": "Location",
+    "bookNow": "Book Now",
+    "perDay": "per day",
+    "owner": "Owner"
+  },
+  "booking": {
+    "title": "Booking Details",
+    "dates": "Rental Dates",
+    "duration": "Duration",
+    "insurance": "Insurance Options",
+    "payment": "Payment",
+    "total": "Total",
+    "terms": "Terms and Conditions",
+    "confirm": "Confirm Booking"
+  },
+  "auth": {
+    "login": "Log In",
+    "signup": "Sign Up",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "fullName": "Full Name",
+    "phoneNumber": "Phone Number",
+    "forgotPassword": "Forgot Password?",
+    "noAccount": "Don't have an account?",
+    "hasAccount": "Already have an account?",
+    "verification": {
+      "title": "Verify Your Identity",
+      "instructions": "Please upload the required documents to verify your identity.",
+      "idCard": "National ID / Iqama",
+      "drivingLicense": "Driving License",
+      "selfie": "Selfie with ID",
+      "upload": "Upload",
+      "submit": "Submit for Verification"
+    }
+  },
+  "profile": {
+    "personalInfo": "Personal Information",
+    "paymentMethods": "Payment Methods",
+    "verificationStatus": "Verification Status",
+    "preferences": "Preferences",
+    "editProfile": "Edit Profile",
+    "saveChanges": "Save Changes"
+  },
+  "dashboard": {
+    "owner": {
+      "title": "Owner Dashboard",
+      "cars": "My Cars",
+      "bookings": "Booking Requests",
+      "earnings": "Earnings",
+      "addCar": "Add a Car"
+    },
+    "renter": {
+      "title": "Renter Dashboard",
+      "upcomingTrips": "Upcoming Trips",
+      "pastTrips": "Past Trips",
+      "favorites": "Favorite Cars"
+    }
+  },
+  "footer": {
+    "about": "About Us",
+    "terms": "Terms of Service",
+    "privacy": "Privacy Policy",
+    "faq": "FAQ",
+    "contact": "Contact Us",
+    "copyright": "© 2025 Sayyara. All rights reserved."
+  }
+}
