@@ -154,7 +154,7 @@ const AuthPage: React.FC = () => {
               {isSignUp && (
                 <>
                   <div>
-                    <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
+                    <label htmlFor="fullName\" className="block text-sm font-medium text-gray-700">
                       {t('auth.fullName')}
                     </label>
                     <div className="mt-1 relative rounded-md shadow-sm">
